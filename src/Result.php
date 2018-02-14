@@ -13,11 +13,13 @@ class Result {
 	private $arrayPayload;
 	private $objectPayload;
 	private $responseCode;
+	private $message;
 
-	public __construct($successful = false, $rawPayload = null, $responseCode = -1) {
+	public __construct($successful = false, $message = 'Error', $rawPayload = null, $responseCode = -1) {
 		$this->successful = $successful;
 		$this->rawPayload = $rawPayload;
-		$this->responseCode = $responseCode;
+		$this->responseCode = (int) $responseCode;
+		$this->message = $message;
 
 		if (!$this->successful || $this->rawPayload == null || $this->responseCode == -1) {
 			return $this;
@@ -25,6 +27,24 @@ class Result {
 
 		// make the data usable
 		$this->process();
+	}
+
+	/**
+	 * The plain text representaiton of the HTTP response code
+	 * 
+	 * @return string Text representaiton of the HTTP response code
+	 */
+	public function getStatusMessage() {
+		return $this->message;
+	}
+
+	/**
+	 * The status code returned by the API
+	 * 
+	 * @return int HTTP status code
+	 */
+	public function getStatusCode() {
+		return $this->responseCode;
 	}
 
 	/**
@@ -37,7 +57,7 @@ class Result {
 
 		// turn this instance of Result into a result set
 		foreach ($this->arrayPayload as $key => $value) {
-		    $object->{$key} = $value;
+		    $this->{$key} = $value;
 		}
 	}
 
@@ -62,7 +82,7 @@ class Result {
 	 * @return Array PHP Array, result of json_decode on the raw response
 	 */
 	public function getDataArray() {
-		return $this->rawPayload;
+		return $this->arrayPayload;
 	}
 
 	/**
@@ -70,6 +90,6 @@ class Result {
 	 * @return Array PHP Object, result of json_decode on the raw response
 	 */
 	public function getDataObject() {
-		return $this->rawPayload;
+		return $this->objectPayload;
 	}
 }
