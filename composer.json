@@ -1,0 +1,13 @@
+{
+    "name":"WhoisAPIEU/Adapter",
+    "description":"PHP Library to access the APIs provided by whoisapi.eu",
+    "license": "MIT",
+    "require":{
+        "php":"^5.3.3 || ^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "WhoisAPIEU\\Adapter\\": "src"
+        }
+    }
+}
