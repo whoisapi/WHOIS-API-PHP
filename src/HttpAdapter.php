@@ -1,6 +1,6 @@
 <?php
 
-namespace WhoisAPIEU\Adapter;
+namespace WhoisAPI\Adapter;
 
 /**
 * A simple HTTP adapter

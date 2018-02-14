@@ -1,9 +1,9 @@
 <?php
 
-namespace WhoisAPIEU\Adapter;
+namespace WhoisAPI\Adapter;
 
-use WhoisAPIEU\Adapter\HttpAdapter;
-use WhoisAPIEU\Adapter\Result;
+use WhoisAPI\Adapter\HttpAdapter;
+use WhoisAPI\Adapter\Result;
 
 /**
  * The base API request class

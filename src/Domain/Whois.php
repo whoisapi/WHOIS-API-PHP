@@ -1,8 +1,8 @@
 <?php
 
-namespace WhoisAPIEU\Adapter\Domain;
+namespace WhoisAPI\Adapter\Domain;
 
-use WhoisAPIEU\Adapter\Base;
+use WhoisAPI\Adapter\Base;
 
 class Whois {
 	const END_POINT = '/whois/domain';

@@ -1,5 +1,5 @@
 {
-    "name":"WhoisAPIEU/Adapter",
+    "name":"whoisapi/adapter",
     "description":"PHP Library to access the APIs provided by whoisapi.eu",
     "license": "MIT",
     "require":{
@@ -7,7 +7,7 @@
     },
     "autoload": {
         "psr-4": {
-            "WhoisAPIEU\\Adapter\\": "src"
+            "WhoisAPI\\Adapter\\": "src"
         }
     }
 }
