@@ -21,7 +21,7 @@ class Base {
 	const RESPONSE_BILLING = 402;
 	const RESPONSE_INTERNAL_SERVER_ERROR = 500;
 
-	public __construct($apiKey) {
+	public function __construct($apiKey) {
 		$this->apiKey = $apiKey;
 	}
 
@@ -43,10 +43,10 @@ class Base {
 	public function run() {
 		$url = $this->getRequestBase();
 
-		$rawResult = HttpAdapter::get($url, $this->payload);
+		$rawResult = HttpAdapter::get($url, $this->payload + ['key' => $this->apiKey]);
 
 		$success = true;
-		if ($rawResult['http_code'] != 200) {
+		if ($rawResult['http_code'] != self::RESPONSE_PROCESSED) {
 			$success = false;
 		}
 
@@ -63,7 +63,7 @@ class Base {
 	 */
 	private function getMessage($code) {
 		switch($code) {
-			case self::PROCESSED:
+			case self::RESPONSE_PROCESSED:
 				return 'The command was processed successfully.';
 				break;
 			case self::RESPONSE_UNPROCESSABLE:

@@ -22,13 +22,20 @@ class HttpAdapter {
 		// build query string
 		$query = self::buildQuery($params);
 
-		// Set some options - we are passing in a useragent too here
+		// Set some options
 		\curl_setopt_array($curl, array(
-		    CURLOPT_RETURNTRANSFER => 1,
+		    CURLOPT_RETURNTRANSFER => true,
 		    CURLOPT_URL => $url . '?' . $query,
 		    CURLOPT_USERAGENT => 'WHOISAPIEU Client 1.0.0',
 		    CURLOPT_HTTPGET => true
 		));
+
+		if (!defined('WHOISAPIEU_IGNORE_CA') || WHOISAPIEU_IGNORE_CA == true) {
+			\curl_setopt_array($curl, array(
+			    CURLOPT_SSL_VERIFYHOST => false,
+			    CURLOPT_SSL_VERIFYPEER => false
+			));
+		}
 
 		// Send the request & save response to $resp
 		$response = \curl_exec($curl);

@@ -1,19 +1,19 @@
 <?php
 
-namespace WhoisAPI\Adapter\Domain;
+namespace WhoisAPI\Adapter\IP;
 
 use WhoisAPI\Adapter\Base;
 
 class Whois extends Base {
-	const END_POINT = '/whois/domain';
+	const END_POINT = '/whois/ip';
 
 	/**
 	 * Set the payload for the request
 	 * 
-	 * @param string $domain domain name to lookup
+	 * @param string $ip IP address to lookup
 	 */
-	public function setPayload($domain) {
-		$this->payload = ['domain' => $domain];
+	public function setPayload($ip) {
+		$this->payload = ['ip_address' => $ip];
 	}
 
 	/**

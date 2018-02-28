@@ -15,7 +15,7 @@ class Result {
 	private $responseCode;
 	private $message;
 
-	public __construct($successful = false, $message = 'Error', $rawPayload = null, $responseCode = -1) {
+	public function __construct($successful = false, $message = 'Error', $rawPayload = null, $responseCode = -1) {
 		$this->successful = $successful;
 		$this->rawPayload = $rawPayload;
 		$this->responseCode = (int) $responseCode;
@@ -53,10 +53,17 @@ class Result {
 	 */
 	private function process() {
 		$this->arrayPayload = json_decode($this->rawPayload, true);
+		if (isset($this->arrayPayload['result'])) {
+			$this->arrayPayload = $this->arrayPayload['result'];
+		}
+
 		$this->objectPayload = json_decode($this->rawPayload, false);
+		if (isset($this->objectPayload->result)) {
+			$this->objectPayload = $this->objectPayload->result;
+		}
 
 		// turn this instance of Result into a result set
-		foreach ($this->arrayPayload as $key => $value) {
+		foreach ($this->objectPayload as $key => $value) {
 		    $this->{$key} = $value;
 		}
 	}

@@ -4,13 +4,13 @@ namespace WhoisAPI\Adapter\Domain;
 
 use WhoisAPI\Adapter\Base;
 
-class Whois extends Base {
-	const END_POINT = '/whois/domain';
+class Availability extends Base {
+	const END_POINT = '/availability';
 
 	/**
 	 * Set the payload for the request
 	 * 
-	 * @param string $domain domain name to lookup
+	 * @param string $domain domain name such as "google.com" to check for reg availability
 	 */
 	public function setPayload($domain) {
 		$this->payload = ['domain' => $domain];
