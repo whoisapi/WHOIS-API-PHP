@@ -1,31 +1,49 @@
 <?php
 
-use WhoisAPI\IP\Whois as IPWhois;
-use WhoisAPI\Capsule\Result as WhoisAPIResult;
+require "autoload.php";
+
+use WhoisAPI\Adapter\IP\Whois as IpWhois;
 
 # set key for demo
 define('WHOISAPIEU_PRIV_KEY', 'REPLACE WITH YOUR KEY HERE');
 
-# domain for which to query the WHOIS API
-$domain = '8.8.8.8';
+# set to true to ignore TLS errors (use only for testing)
+define('WHOISAPIEU_IGNORE_CA', true);
 
-# Create a new instance of IPWhois
+# ip for which to query the WHOIS API
+$ip = '8.8.8.8';
+
+# Create a new instance of IpWhois
 # This is not required with each call, only the first
-$IPWhois = new IPWhois(WHOISAPIEU_PRIV_KEY);
+$IpWhois = new IpWhois(WHOISAPIEU_PRIV_KEY);
 
-# set the domain for the query
-$IPWhois->setPayload($ip);
+# set the ip for the query
+$IpWhois->setPayload($ip);
 
 # Perform the query and store the resulting object 
-$Result = $IPWhois->run();
+$Result = $IpWhois->run();
 
 # check for successful execution
 if (!$Result->isSuccessful()) {
 	# query failed, print the reason
-	echo 'Lookup failed (' . $Result->getErrorCode() . '): ' . $Result->getErrorText();
+	echo 'Lookup failed (' . $Result->getStatusCode() . '): ' . $Result->getStatusMessage();
 } else {
 	# get the result of the successful query as an array (default) 
-	$array = $Result->getData(WhoisAPIResult::TYPE_ARRAY);
+	$dataArray = $Result->getDataArray();
+	
+	echo 'Created date (array): ' . $dataArray['created'] . '<br>';
 
-	print_r($array);
+	$dataObject = $Result->getDataObject();
+	
+	echo 'Created date (object): ' . $dataObject->created . '<br>';
+
+	echo 'Created date (direct from $Result): ' . $Result->created . '<br>';
+
+	echo 'Owner (direct from $Result): ' . $Result->contacts->owner[0]->organization . '<br>';
+
+	echo 'Owner (array): ' . $dataArray['contacts']['owner'][0]['organization'] . '<br>';
+
+	echo '<br>';
+
+	print_r($dataArray);
 }

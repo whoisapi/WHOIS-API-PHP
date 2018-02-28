@@ -1,33 +1,37 @@
 <?php
 
-use WhoisAPI\Browser\Screenshot as BrowserScreenshot;
-use WhoisAPI\Capsule\Result as WhoisAPIResult;
+require "autoload.php";
+
+use WhoisAPI\Adapter\Browser\Screenshot as BrowserScreenshot;
 
 # set key for demo
 define('WHOISAPIEU_PRIV_KEY', 'REPLACE WITH YOUR KEY HERE');
 
-# domain for which to query the WHOIS API
+# set to true to ignore TLS errors (use only for testing)
+define('WHOISAPIEU_IGNORE_CA', true);
+
+# domain for which to make a screenshot
 $domain = 'google.com';
 
-# Create a new instance of DomainWhois
+# Create a new instance of BrowserScreenshot
 # This is not required with each call, only the first
-$DomainWhois = new DomainWhois(WHOISAPIEU_PRIV_KEY);
+$BrowserScreenshot = new BrowserScreenshot(WHOISAPIEU_PRIV_KEY);
 
+$width = 1200;
+$height = 900;
 # set the domain for the query
-$DomainWhois->setPayload($domain);
+$BrowserScreenshot->setPayload($domain, $width, $height);
 
 # Perform the query and store the resulting object 
-$Result = $DomainWhois->run();
+$Result = $BrowserScreenshot->run();
 
 # check for successful execution
 if (!$Result->isSuccessful()) {
 	# query failed, print the reason
-	echo 'Lookup failed (' . $Result->getErrorCode() . '): ' . $Result->getErrorText();
+	echo 'Lookup failed (' . $Result->getStatusCode() . '): ' . $Result->getStatusMessage();
 } else {
 	# get the result of the successful query as an array (default) 
-	$array = $Result->getData(WhoisAPIResult::TYPE_ARRAY);
+	$dataArray = $Result->getDataArray();
 	
-	echo 'Expiry date: ' . $array['expires'];
-
-	print_r($array);
+	echo '<img src="' . $dataArray['prefix'] . $dataArray['base64'] . '" />';
 }

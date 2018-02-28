@@ -1,10 +1,14 @@
 <?php
 
+require "autoload.php";
+
 use WhoisAPI\Adapter\Domain\Whois as DomainWhois;
-use WhoisAPI\Adapter\Capsule\Result as WhoisAPIResult;
 
 # set key for demo
 define('WHOISAPIEU_PRIV_KEY', 'REPLACE WITH YOUR KEY HERE');
+
+# set to true to ignore TLS errors (use only for testing)
+define('WHOISAPIEU_IGNORE_CA', true);
 
 # domain for which to query the WHOIS API
 $domain = 'google.com';
@@ -22,12 +26,24 @@ $Result = $DomainWhois->run();
 # check for successful execution
 if (!$Result->isSuccessful()) {
 	# query failed, print the reason
-	echo 'Lookup failed (' . $Result->getErrorCode() . '): ' . $Result->getErrorText();
+	echo 'Lookup failed (' . $Result->getStatusCode() . '): ' . $Result->getStatusMessage();
 } else {
 	# get the result of the successful query as an array (default) 
-	$array = $Result->getData(WhoisAPIResult::TYPE_ARRAY);
+	$dataArray = $Result->getDataArray();
 	
-	echo 'Expiry date: ' . $array['expires'];
+	echo 'Expiry date (array): ' . $dataArray['expires'] . '<br>';
 
-	print_r($array);
+	$dataObject = $Result->getDataObject();
+	
+	echo 'Expiry date (object): ' . $dataObject->expires . '<br>';
+
+	echo 'Expiry date (direct from $Result): ' . $Result->expires . '<br>';
+
+	echo 'Owner Email (direct from $Result): ' . $Result->contacts->owner[0]->email . '<br>';
+
+	echo 'Owner Email (array): ' . $dataArray['contacts']['owner'][0]['email'] . '<br>';
+
+	echo '<br>';
+
+	print_r($dataArray);
 }
